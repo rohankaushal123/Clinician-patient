@@ -1,0 +1,167 @@
+{{> clinician_sidebar}}
+{{> header}}
+<div class="panel-content">
+    <div class="wt-grid-container">
+
+        {{!-- Heading and Subheading --}}
+        <div class="wt-grid-item size-12@t">
+            <h1>Comments</h1>
+            <p style="display: inline;">Today :
+            <p id="date" style="display: inline;">{{dateFormat todayDate}} </p>
+            </p>
+        </div>
+
+        <div class="wt-grid-item size-12@t">
+            <div class="wt-card-content">
+                <div class="wt-grid-container">
+                    <div class="wt-grid-item size-2@t" style="padding-left: 5%;">
+                        <strong>Date</strong>
+                    </div>
+                    <div class="wt-grid-item size-3@t" style="padding-left: 5%;">
+                        <strong>Full name</strong>
+                    </div>
+                    <div class="wt-grid-item size-3@t" style="padding-left: 5%; padding-right:2.5%;">
+                        <strong>Health Data Label</strong>
+                    </div>
+                    <div class="wt-grid-item size-4@t" style="text-align: center;">
+                        <strong>Comments</strong>
+                    </div>
+                </div>
+            </div>
+
+            {{#each patients}}
+            {{#each healthData}}
+            {{#if (or (checkLength glucoseLevel.comment) (checkLength
+            weight.comment) (checkLength insulinDoses.comment) (checkLength
+            exercise.comment))}}
+            <div class="wt-card">
+                <div class="wt-card-content">
+                    <div class="wt-grid-container">
+
+                        {{!-- <div class="wt-grid-item size-1@t">
+                            <img class="wt-border-rounded" src="/assets/img/patient_img.png" width="40px">
+                        </div> --}}
+                        <div class="wt-grid-item size-2@t" style="padding-left: 5%;">
+                            {{date}}
+
+                        </div>
+                        <div class="wt-grid-item size-3@t">
+                            <div class="wt-grid-container">
+                                <div class="wt-grid-item size-3@t" style="padding: 0%;">
+                                    <img class="wt-border-rounded" src="{{urlImage }}" width="35px">
+                                </div>
+                                <div class="wt-grid-item size-9@t" style="padding: 0%; padding-top:2.5%">
+                                    <a href="./clinician_dashboard/{{id}}/clinician_patient_data">
+                                        {{givenName}} {{family}}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {{!-- patient[i].healthdata[j].patientData.urlimage
+                        patient[0].patientData --}}
+                        {{#if (checkLength glucoseLevel.comment)}}
+
+                        <div class="wt-grid-item size-3@t"
+                            style="text-align:center; padding-right: 5%; margin-left:40%; margin-top:-6.5%;">
+                            Glucose level
+                        </div>
+                        <div class="wt-grid-item size-4@t" style="padding: 0%; margin-top:-5.5%;">
+                            <div class="wt-grid-item size-12@t" style="align-items: center;margin-top:-5%;">
+                                {{!-- <div class="wt-card" id="vertical_scroll_card"> --}}
+                                    <a href="./clinician_dashboard/{{id}}/clinician_patient_data">
+                                        {{!-- <input type="text" readonly name="glucose" id="glu"
+                                            value="{{glucoseLevel.comment}}" style="margin: 0;"> --}}
+                                        <textarea name="glucose" id="glu" cols="6" rows="1"
+                                            style="margin: 0;">{{glucoseLevel.comment}}</textarea>
+                                    </a>
+                                    {{!--
+                                </div> --}}
+                            </div>
+                        </div>
+                        {{/if}}
+
+                        {{#if (checkLength weight.comment)}}
+
+                        <div class="wt-grid-item size-3@t"
+                            style="text-align:center; padding-right: 5%; margin-left:40%; margin-top:-2%;">
+                            Weight
+                        </div>
+                        <div class="wt-grid-item size-4@t" style="padding: 0%;margin-top:-3%;">
+                            <div class="wt-grid-item size-12@t" style="align-items: center;">
+                                {{!-- <div class="wt-card" id="vertical_scroll_card"> --}}
+                                    <a href="./clinician_dashboard/{{id}}/clinician_patient_data">
+                                        {{!-- <input type="text" readonly name="glucose" id="glu"
+                                            value="{{weight.comment}}" style="margin: 0;"> --}}
+                                        <textarea name="weight" id="wei" cols="6" rows="1"
+                                            style="margin: 0;">{{weight.comment}}</textarea>
+                                    </a>
+                                    {{!--
+                                </div> --}}
+                            </div>
+                        </div>
+                        {{/if}}
+                        {{#if (checkLength insulinDoses.comment 0) }}
+
+
+                        <div class="wt-grid-item size-3@t"
+                            style="text-align:center; padding-right: 5%; margin-left:40%; margin-top:-1%;">
+                            Insulin Doses
+                        </div>
+                        <div class="wt-grid-item size-4@t" style="padding: 0%; margin-top:-2%;">
+                            <div class="wt-grid-item size-12@t" style="align-items: center;">
+
+                                {{!-- <div class="wt-card" id="vertical_scroll_card"> --}}
+                                    <a href="./clinician_dashboard/{{id}}/clinician_patient_data">
+                                        {{!-- <input type="text" readonly name="glucose" id="glu"
+                                            value="{{insulinDoses.comment}}" style="margin: 0;"> --}}
+
+                                        <textarea name="Insu" id="Ins" cols="6" rows="1"
+                                            style="margin: 0;">{{insulinDoses.comment}}</textarea>
+
+
+                                    </a>
+                                    {{!--
+                                </div> --}}
+                            </div>
+                        </div>
+                        {{/if}}
+                        {{#if (checkLength exercise.comment)}}
+
+
+
+                        <div class="wt-grid-item size-3@t"
+                            style="text-align:center; padding-right: 5%; margin-left:40%;margin-top:-1%;">
+                            Exercise
+                        </div>
+                        <div class="wt-grid-item size-4@t" style="padding: 0%;margin-top:-2%;">
+                            <div class="wt-grid-item size-12@t" style="align-items: center;">
+
+                                {{!-- <div class="wt-card" id="vertical_scroll_card"> --}}
+                                    <a href="./clinician_dashboard/{{id}}/clinician_patient_data">
+                                        {{!-- <input type="text" readonly name="glucose" id="glu"
+                                            value="{{exercise.comment}}" style="margin: 0;"> --}}
+
+                                        <textarea name="Exercise" id="Exe" cols="6" rows="1"
+                                            style="margin: 0;">{{exercise.comment}}</textarea>
+                                    </a>
+                                    {{!--
+                                </div> --}}
+                            </div>
+                        </div>
+
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+            <br />
+            {{/if}}
+            {{/each}}
+            {{/each}}
+        </div>
+
+
+    </div>
+</div>
+<script>
+    initSocket();
+</script>

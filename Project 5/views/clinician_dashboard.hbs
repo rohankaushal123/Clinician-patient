@@ -1,0 +1,250 @@
+{{> clinician_sidebar}}
+<div class="panel-content">
+    <div class="wt-grid-container">
+
+        {{!-- Heading and Subheading --}}
+        <div class="wt-grid-item size-9@t">
+            <h1>Dashboard</h1>
+            <p style="display: inline;">Today :
+            <p id="date" style="display: inline;">{{dateFormat todayDate}} </p>
+            </p>
+        </div>
+
+        {{!-- Add Patient Button --}}
+        <div class="wt-grid-item size-3@t">
+            <div class="wt-text-align-right">
+                <button class="wt-btn wt-btn-secondary wt-btn-with-icon" onclick="openModal('addPatientModal')">
+                    <i class="material-icons">add</i> ADD PATIENT</button>
+            </div>
+        </div>
+
+        {{!-- Instructions --}}
+        <div class="wt-grid-item size-12@p size-12@t">
+            <p>Here you can find the today's health data of your patients</p>
+            <br />
+            <p><span class="wt-color-red">RED</span> means out of Threshold</p>
+            <p><span class="wt-color-amber">AMBER</span> means this value was not registed yet</p>
+            <br />
+            <p>HOVER the value to see the lower and upper Thresholds</p>
+        </div>
+
+
+        {{!-- Patient Data Card Rows --}}
+        <div class="wt-grid-item size-12@t">
+            <div class="wt-card-content">
+                <div class="wt-grid-container">
+                    <div class="wt-grid-item size-1@t">
+                    </div>
+                    <div class="wt-grid-item size-2@t">
+                        <strong>Full Name</strong>
+                    </div>
+                    <div class="wt-grid-item size-2@t">
+                        <strong>Blood Glucose Level</strong>
+                    </div>
+                    <div class="wt-grid-item size-2@t">
+                        <strong>Weight</strong>
+                    </div>
+                    <div class="wt-grid-item size-2@t">
+                        <strong>Insulin Doses</strong>
+                    </div>
+                    <div class="wt-grid-item size-2@t">
+                        <strong>Exercise</strong>
+                    </div>
+                    <div class="wt-grid-item size-1@t">
+                    </div>
+                </div>
+            </div>
+
+            {{!-- Fetch database data --}}
+            {{#each patients}}
+            <div class="wt-card">
+                <div class="wt-card-content">
+                    <div class="wt-grid-container">
+                        <div class="wt-grid-item size-1@t">
+                            <img class="wt-border-rounded" src="{{patientData.urlImage}}" width="40px">
+                        </div>
+                        <div class="wt-grid-item size-2@t">
+
+                            <a href="./clinician_dashboard/{{patientData._id}}/clinician_patient_data">
+                                {{patientData.givenName}} {{patientData.familyName}}
+                            </a>
+                        </div>
+
+                        <div class="wt-grid-item size-2@t">
+                            {{#if (isfill healthData.glucoseLevel.mandatory)}}
+                            <span
+                                title="lower: {{healthDataSettings.glucoseLevel.lowerThreshold}} upper: {{healthDataSettings.glucoseLevel.upperThreshold}}">
+                                {{#if healthData.glucoseLevel.value}}
+                                <span
+                                    class="{{#checkOutOfThreshold healthData.glucoseLevel.outOfTheThreshold}} {{/checkOutOfThreshold}}">
+                                    {{{healthData.glucoseLevel.value}}}
+                                </span>
+                                {{else}}
+                                <span class="wt-color-amber">
+                                    Pending
+                                </span>
+                                {{/if}}
+                            </span>
+                            {{#if (checkLength healthData.glucoseLevel.comment)}}
+                            <i class="material-icons" style="font-size: smaller; cursor: pointer;"
+                                onclick="openModal('patientCommentModal_{{patientData._id}}_glucoseLevel')">message</i>
+                            {{> modal_patient_comment name=patientData.givenName identifier=patientData._id
+                            type="glucoseLevel"
+                            comment=healthData.glucoseLevel.comment }}
+                            {{/if }}
+                            {{else}}
+                            <span class="wt-color-grey">
+                                -
+                            </span>
+                            {{/if}}
+                        </div>
+                        <div class="wt-grid-item size-2@t">
+                            {{#if (isfill healthData.weight.mandatory)}}
+                            <span
+                                title="lower: {{healthDataSettings.weight.lowerThreshold}} upper: {{healthDataSettings.weight.upperThreshold}}">
+
+                                {{#if healthData.weight.value}}
+                                <span
+                                    class="{{#checkOutOfThreshold healthData.weight.outOfTheThreshold}} {{/checkOutOfThreshold}}">
+                                    {{{healthData.weight.value}}}
+                                </span>
+                                {{else}}
+                                <span class="wt-color-amber">
+                                    Pending
+                                </span>
+                                {{/if}}
+                            </span>
+                            {{#if (checkLength healthData.weight.comment)}}
+                            <i class="material-icons" style="font-size: smaller; cursor: pointer;"
+                                onclick="openModal('patientCommentModal_{{patientData._id}}_weight')">message</i>
+                            {{> modal_patient_comment name=patientData.givenName identifier=patientData._id
+                            type="weight"
+                            comment=healthData.weight.comment }}
+                            {{/if }}
+                            {{else}}
+                            <span class="wt-color-grey">
+                                -
+                            </span>
+                            {{/if}}
+                        </div>
+                        <div class="wt-grid-item size-2@t">
+                            {{#if (isfill healthData.insulinDoses.mandatory)}}
+                            <span
+                                title="lower: {{healthDataSettings.insulinDoses.lowerThreshold}} upper: {{healthDataSettings.insulinDoses.upperThreshold}}">
+
+                                {{#if healthData.insulinDoses.value}}
+                                <span
+                                    class="{{#checkOutOfThreshold healthData.insulinDoses.outOfTheThreshold}} {{/checkOutOfThreshold}}">
+                                    {{{healthData.insulinDoses.value}}}
+                                </span>
+                                {{else}}
+                                <span class="wt-color-amber">
+                                    Pending
+                                </span>
+                                {{/if}}
+                            </span>
+                            {{#if (checkLength healthData.insulinDoses.comment)}}
+                            <i class="material-icons" style="font-size: smaller; cursor: pointer;"
+                                onclick="openModal('patientCommentModal_{{patientData._id}}_insulinDoses')">message</i>
+                            {{> modal_patient_comment name=patientData.givenName identifier=patientData._id
+                            type="insulinDoses"
+                            comment=healthData.insulinDoses.comment }}
+                            {{/if }}
+                            {{else}}
+                            <span class="wt-color-grey">
+                                -
+                            </span>
+                            {{/if}}
+                        </div>
+                        <div class="wt-grid-item size-2@t">
+                            {{#if (isfill healthData.exercise.mandatory)}}
+                            <span
+                                title="lower: {{healthDataSettings.exercise.lowerThreshold}} upper: {{healthDataSettings.exercise.upperThreshold}}">
+                                {{#if healthData.exercise.value}}
+                                <span
+                                    class="{{#checkOutOfThreshold healthData.exercise.outOfTheThreshold}} {{/checkOutOfThreshold}}">
+                                    {{{healthData.exercise.value}}}
+                                </span>
+                                {{else}}
+                                <span class="wt-color-amber">
+                                    Pending
+                                </span>
+                                {{/if}}
+                            </span>
+                            {{#if (checkLength healthData.exercise.comment)}}
+                            <i class="material-icons" style="font-size: smaller; cursor: pointer;"
+                                onclick="openModal('patientCommentModal_{{patientData._id}}_exercise')">message</i>
+                            {{> modal_patient_comment name=patientData.givenName identifier=patientData._id
+                            type="exercise"
+                            comment=healthData.exercise.comment }}
+                            {{/if }}
+                            {{else}}
+                            <span class="wt-color-grey">
+                                -
+                            </span>
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            {{/each}}
+        </div>
+    </div>
+
+    {{!-- Add Patient Modal --}}
+    <div id="addPatientModal" class="wt-modal">
+        <div class="wt-modal-content">
+            <span class="wt-modal-close">&times;</span>
+            <form action="/clinician_dashboard/insertPatient" method="POST">
+                <div class="wt-grid-container">
+                    <div class="wt-grid-item size-12@t">
+                        <h2>Add Patient</h2>
+                        <p>Please enter the following details</p>
+                    </div>
+                    <div class="wt-grid-item size-6@t">
+                        <label>Email</label>
+                        <input required name="email" type="email" />
+                    </div>
+                    <div class="wt-grid-item size-6@t">
+                        <label>Password</label>
+                        <input required name="password" type="password" minlength="8"/>
+                    </div>
+                    <div class="wt-grid-item size-6@t">
+                        <label>Given Name</label>
+                        <input required name="givenName" type="text" />
+                    </div>
+                    <div class="wt-grid-item size-6@t">
+                        <label>Family Name</label>
+                        <input required name="familyName" type="text" />
+                    </div>
+                    <div class="wt-grid-item size-6@t">
+                        <label>Year of Birth</label>
+                        <input required name="yearOfBirth" type="text" pattern="\d*" placeholder="YYYY" maxlength="4" />
+                    </div>
+                    <div class="wt-grid-item size-6@t">
+                        <label>Profile Picture URL</label>
+                        <input name="urlImage" type="text" />
+                    </div>
+                    <div class="wt-grid-item size-6@t">
+                        <label>Screen Name</label>
+                        <input required name="screenName" type="text" />
+                    </div>
+                    <div class="wt-grid-item size-12@t">
+                        <label>Bio</label>
+                        <textarea rows="5" name="bio"></textarea>
+                    </div>
+                    <div class="wt-grid-item size-12@t">
+                        <div class="wt-text-align-right">
+                            <button type="submit" class="wt-btn wt-btn-secondary">ADD PATIENT</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="notification_clinician" class="wt-notification warning"> </div>
+</div>
+<script>
+    initSocket();
+</script>

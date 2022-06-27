@@ -1,0 +1,340 @@
+{{> patient_sidebar}}
+{{> header}}
+
+{{!The whole page w/o patient_sidebar}}
+<div class="panel-content">
+
+    {{!grid format to layout "boxes" of items}}
+    <div class="wt-grid-container">
+        <div class="wt-grid-item size-12@p size-12@t wt-color-primary">
+            <div style="display:flex; align-items:center">
+                <div style="flex-grow: 1;">
+                    <h1>Welcome back {{patient.givenName}} 👋</h1>
+                </div>
+                <div class="wt-card wt-card-content pointer" style="display:flex; align-items:center">
+                    <a href="/patient_profile" class="wt-visible@t wt-hidden@p">
+                        <div style="display: flex; align-items: center;">
+                            <img class="wt-border-rounded" src="{{patient.urlImage}}" width="40px">
+                            <span>Account</span>
+                        </div>
+                    </a>
+                    <a href="/patient_profile" class="wt-visible@p wt-hidden@t">
+                        <img class="wt-border-rounded" src="{{patient.urlImage}}" width="40px">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="wt-grid-item size-12@p size-12@t">
+            <p>Please complete your daily health data</p>
+        </div>
+        {{#if supportMessage}}
+        <div class="wt-grid-item size-12@p size-12@t">
+            <div class="support_message">
+                <strong>Your clinician says:</strong>
+                <p>{{supportMessage}}</p>
+            </div>
+        </div>
+        {{/if}}
+        {{#if lastRecord.glucoseLevel.mandatory}}
+        <div class="wt-grid-item size-12@p size-6@t">
+            <div class="wt-card wt-padding">
+                <div style="display:flex; align-items:center">
+                    <div style="flex-grow: 1;">
+                        <h3 class="wt-color-primary">Glucose level</h3>
+                    </div>
+                    <div><img src="./assets/img/glucose_icon.png" alt="" width="50px"></div>
+                </div>
+
+                <br />
+                <div id="glucoseLevel_ShowBlock">
+                    <form method="POST">
+                        <label>Your record</label>
+                        {{#if lastRecord.glucoseLevel.outOfTheThreshold}}
+                        <span class="wt-color-red">
+                            <p>
+                                {{#if lastRecord.glucoseLevel.value}}
+                                <span style="font-size:30px">{{lastRecord.glucoseLevel.value}}</span> nmol/L - out of
+                                the range
+                                {{/if}}
+                            </p>
+                        </span>
+                        {{else}}
+                        <span>
+                            <p>
+                                {{#if lastRecord.glucoseLevel.value}}
+                                <span class="wt-color-green">
+                                    <span style="font-size:30px">
+                                        {{lastRecord.glucoseLevel.value}}
+                                    </span>
+                                    nmol/L - perfect value!</span>
+                                {{else}}
+                                <span class="wt-color-amber" style="font-size:30px">Pending</span>
+                                {{/if}}
+                            </p>
+                        </span>
+                        {{/if}}
+                        <br />
+                        <label>Normal range</label>
+                        <h5>{{healthDataSettings.glucoseLevel.lowerThreshold}}nmol/L to
+                            {{healthDataSettings.glucoseLevel.upperThreshold}}nmol/L</h5>
+                        <br />
+                        {{#if (checkLength lastRecord.glucoseLevel.comment)}}
+                        <label>Comment</label>
+                        <h5>{{lastRecord.glucoseLevel.comment}}</h5>
+                        {{/if}}
+                        <div class="wt-text-align-right">
+                            <br />
+                            <button type="button" class="wt-btn wt-btn-secondary"
+                                onclick="enableEditMode('glucoseLevel',true)">Edit</button>
+                        </div>
+                    </form>
+                </div>
+                <div id="glucoseLevel_EditBlock" style="display: none;">
+                    <label>Value</label>
+                    <input name="glucoseLevelValue" type="number" value={{lastRecord.glucoseLevel.value}} />
+
+                    <label>Comment</label>
+                    <textarea name="glucoseLevelComment" rows="5">{{lastRecord.glucoseLevel.comment}}</textarea>
+                    <div class="wt-text-align-right">
+                        <br />
+                        <button type="button" class="wt-btn"
+                            onclick="enableEditMode('glucoseLevel',false)">Cancel</button>
+                        <button onclick="insertRecord('glucoseLevel')" class="wt-btn wt-btn-secondary">SAVE</button>
+                    </div>
+                </div>
+                <br />
+                <div class="wt-text-align-center">
+                    <small>last update {{dateHourFormat
+                        lastRecord.glucoseLevel.timestamp}}</small>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+        {{#if lastRecord.weight.mandatory}}
+        <div class="wt-grid-item size-12@p size-6@t">
+            <div class="wt-card wt-padding">
+                <div style="display:flex; align-items:center">
+                    <div style="flex-grow: 1;">
+                        <h3 class="wt-color-primary">Weight</h3>
+                    </div>
+                    <div><img src="./assets/img/weight_icon.png" alt="" width="50px"></div>
+                </div>
+
+                <br />
+                <div id="weight_ShowBlock">
+                    <form method="POST">
+                        <label>Your record</label>
+                        {{#if lastRecord.weight.outOfTheThreshold}}
+                        <span class="wt-color-red">
+                            <p>
+                                {{#if lastRecord.weight.value}}
+                                <span style="font-size:30px">{{lastRecord.weight.value}}</span> kg - out of the
+                                range
+                                {{/if}}
+                            </p>
+                        </span>
+                        {{else}}
+                        <span>
+                            <p>
+                                {{#if lastRecord.weight.value}}
+                                <span class="wt-color-green">
+                                    <span style="font-size:30px">
+                                        {{lastRecord.weight.value}}
+                                    </span>
+                                    kg - perfect value!</span>
+                                {{else}}
+                                <span class="wt-color-amber" style="font-size:30px">Pending</span>
+                                {{/if}}
+                            </p>
+                        </span>
+                        {{/if}}
+                        <br />
+                        <label>Normal range</label>
+                        <h5>{{healthDataSettings.weight.lowerThreshold}}kg to
+                            {{healthDataSettings.weight.upperThreshold}}kg</h5>
+                        <br />
+                        {{#if (checkLength lastRecord.weight.comment)}}
+                        <label>Comment</label>
+                        <h5>{{lastRecord.weight.comment}}</h5>
+                        {{/if}}
+                        <div class="wt-text-align-right">
+                            <br />
+                            <button type="button" class="wt-btn wt-btn-secondary"
+                                onclick="enableEditMode('weight',true)">Edit</button>
+                        </div>
+                    </form>
+                </div>
+                <div id="weight_EditBlock" style="display: none;">
+                    <label>Value</label>
+                    <input name="weightValue" type="number" value={{lastRecord.weight.value}} />
+
+                    <label>Comment</label>
+                    <textarea name="weightComment" rows="5">{{lastRecord.weight.comment}}</textarea>
+                    <div class="wt-text-align-right">
+                        <br />
+                        <button type="button" class="wt-btn" onclick="enableEditMode('weight',false)">Cancel</button>
+                        <button onclick="insertRecord('weight')" class="wt-btn wt-btn-secondary">SAVE</button>
+                    </div>
+                </div>
+                <br />
+                <div class="wt-text-align-center">
+                    <small>last update {{dateHourFormat
+                        lastRecord.weight.timestamp}}</small>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+        {{#if lastRecord.insulinDoses.mandatory}}
+        <div class="wt-grid-item size-12@p size-6@t">
+            <div class="wt-card wt-padding">
+                <div style="display:flex; align-items:center">
+                    <div style="flex-grow: 1;">
+                        <h3 class="wt-color-primary">Insulin Doses</h3>
+                    </div>
+                    <div><img src="./assets/img/insulin_doses_icon.png" alt="" width="50px"></div>
+                </div>
+
+                <br />
+                <div id="insulinDoses_ShowBlock">
+                    <form method="POST">
+                        <label>Your record</label>
+                        {{#if lastRecord.insulinDoses.outOfTheThreshold}}
+                        <span class="wt-color-red">
+                            <p>
+                                {{#if lastRecord.insulinDoses.value}}
+                                <span style="font-size:30px">{{lastRecord.insulinDoses.value}}</span> doses - out of
+                                the range
+                                {{/if}}
+                            </p>
+                        </span>
+                        {{else}}
+                        <span>
+                            <p>
+                                {{#if lastRecord.insulinDoses.value}}
+                                <span class="wt-color-green">
+                                    <span style="font-size:30px">
+                                        {{lastRecord.insulinDoses.value}}
+                                    </span>
+                                    doses - perfect value!</span>
+                                {{else}}
+                                <span class="wt-color-amber" style="font-size:30px">Pending</span>
+                                {{/if}}
+                            </p>
+                        </span>
+                        {{/if}}
+                        <br />
+                        <label>Normal range</label>
+                        <h5>{{healthDataSettings.insulinDoses.lowerThreshold}} doses to
+                            {{healthDataSettings.insulinDoses.upperThreshold}} doses</h5>
+                        <br />
+                        {{#if (checkLength lastRecord.insulinDoses.comment)}}
+                        <label>Comment</label>
+                        <h5>{{lastRecord.insulinDoses.comment}}</h5>
+                        {{/if}}
+                        <div class="wt-text-align-right">
+                            <br />
+                            <button type="button" class="wt-btn wt-btn-secondary"
+                                onclick="enableEditMode('insulinDoses',true)">Edit</button>
+                        </div>
+                    </form>
+                </div>
+                <div id="insulinDoses_EditBlock" style="display: none;">
+                    <label>Value</label>
+                    <input name="insulinDosesValue" type="number" value={{lastRecord.insulinDoses.value}} />
+
+                    <label>Comment</label>
+                    <textarea name="insulinDosesComment" rows="5">{{lastRecord.insulinDoses.comment}}</textarea>
+                    <div class="wt-text-align-right">
+                        <br />
+                        <button type="button" class="wt-btn"
+                            onclick="enableEditMode('insulinDoses',false)">Cancel</button>
+                        <button onclick="insertRecord('insulinDoses')" class="wt-btn wt-btn-secondary">SAVE</button>
+                    </div>
+                </div>
+                <br />
+                <div class="wt-text-align-center">
+                    <small>last update {{dateHourFormat
+                        lastRecord.insulinDoses.timestamp}}</small>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+        {{#if lastRecord.exercise.mandatory}}
+        <div class="wt-grid-item size-12@p size-6@t">
+            <div class="wt-card wt-padding">
+                <div style="display:flex; align-items:center">
+                    <div style="flex-grow: 1;">
+                        <h3 class="wt-color-primary">Exercise</h3>
+                    </div>
+                    <div><img src="./assets/img/exercise_icon.png" alt="" width="50px"></div>
+                </div>
+
+                <br />
+                <div id="exercise_ShowBlock">
+                    <form method="POST">
+                        <label>Your record</label>
+                        {{#if lastRecord.exercise.outOfTheThreshold}}
+                        <span class="wt-color-red">
+                            <p>
+                                {{#if lastRecord.exercise.value}}
+                                <span style="font-size:30px">{{lastRecord.exercise.value}}</span> steps - out of the
+                                range
+                                {{/if}}
+                            </p>
+                        </span>
+                        {{else}}
+                        <span>
+                            <p>
+                                {{#if lastRecord.exercise.value}}
+                                <span class="wt-color-green">
+                                    <span style="font-size:30px">
+                                        {{lastRecord.exercise.value}}
+                                    </span>
+                                    steps - perfect value!</span>
+                                {{else}}
+                                <span class="wt-color-amber" style="font-size:30px">Pending</span>
+                                {{/if}}
+                            </p>
+                        </span>
+                        {{/if}}
+                        <br />
+                        <label>Normal range</label>
+                        <h5>{{healthDataSettings.exercise.lowerThreshold}} steps to
+                            {{healthDataSettings.exercise.upperThreshold}} steps</h5>
+                        <br />
+                        {{#if (checkLength lastRecord.exercise.comment)}}
+                        <label>Comment</label>
+                        <h5>{{lastRecord.exercise.comment}}</h5>
+                        {{/if}}
+                        <div class="wt-text-align-right">
+                            <br />
+                            <button type="button" class="wt-btn wt-btn-secondary"
+                                onclick="enableEditMode('exercise',true)">Edit</button>
+                        </div>
+                    </form>
+                </div>
+                <div id="exercise_EditBlock" style="display: none;">
+                    <label>Value</label>
+                    <input name="exerciseValue" type="number" value={{lastRecord.exercise.value}} />
+
+                    <label>Comment</label>
+                    <textarea name="exerciseComment" rows="5">{{lastRecord.exercise.comment}}</textarea>
+                    <div class="wt-text-align-right">
+                        <br />
+                        <button type="button" class="wt-btn" onclick="enableEditMode('exercise',false)">Cancel</button>
+                        <button onclick="insertRecord('exercise')" class="wt-btn wt-btn-secondary">SAVE</button>
+                    </div>
+                </div>
+                <br />
+                <div class="wt-text-align-center">
+                    <small>last update {{dateHourFormat
+                        lastRecord.exercise.timestamp}}</small>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+    <div id="notification_object" class="wt-notification">
+
+    </div>
+</div>

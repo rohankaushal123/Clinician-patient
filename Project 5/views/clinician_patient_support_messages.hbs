@@ -1,0 +1,79 @@
+{{> clinician_sidebar}}
+{{> header}}
+
+<div class="panel-content">
+
+    {{!-- Back to dashboard and Heading --}}
+    {{> clinician_patient_header this}}
+
+    {{!-- Individual Patient's Content --}}
+    <div class="patient_content">
+
+        {{!-- Mini Sidebar --}}
+        {{> clinician_patient_menu}}
+
+        {{!-- Support Messages --}}
+        <div class="wt-grid-container" style="padding: 35px">
+
+            {{!-- Subheading: Support Messages --}}
+            <div class="wt-grid-item size-6@p size-8@t">
+                <h2>Support Messages</h2>
+            </div>
+
+            {{!-- Add Messsage Button --}}
+            <div class="wt-grid-item size-6@p size-4@t wt-text-align-right">
+                <button class="wt-btn wt-btn-secondary wt-btn-with-icon" onclick="openModal('addMessageModal')">
+                    <i class="material-icons">add</i> ADD MESSAGE</button>
+            </div>
+
+            {{!-- Fetch database data --}}
+            <div class="wt-grid-item size-12@p size-12@t">
+                <table class="wt-datatable">
+                    <th>Date</th>
+                    <th>Message</th>
+                    <tbody>
+                        {{#each supportMessage}}
+                        <tr>
+                            <td>
+                                {{#dateHourFormat date}} {{/dateHourFormat}}
+                            </td>
+                            <td>{{message}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    {{!-- Add Message Modal --}}
+    <div id="addMessageModal" class="wt-modal">
+        <div class="wt-modal-content">
+            <form action="/clinician_dashboard/insertSupportMessage/{{patient._id}}" method="POST">
+                <div class="wt-grid-container">
+                    
+                    {{!-- Heading --}}
+                    <div class="wt-grid-item size-6@p size-8@t">
+                        <h2>Add Support Message</h2>
+                    </div>
+                    <div class="wt-grid-item size-6@p size-4@t wt-text-align-right">
+                        <span class="wt-modal-close">&times;</span>
+                    </div>
+
+                    {{!-- Text Area for Message --}}
+                    <div class="wt-grid-item size-12@t">
+                        <textarea required placeholder="Enter messsage..." rows="5" name="message"></textarea>
+                    </div>
+                    
+                    {{!-- Send Button --}}
+                    <div class="wt-grid-item size-12@t wt-text-align-right">
+                        <button type="submit" class="wt-btn wt-btn-secondary">SEND</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

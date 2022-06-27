@@ -1,0 +1,46 @@
+<div class="wt-grid-container " style="min-height: calc(100vh);">
+    <div class="left-login wt-grid-item wt-hidden@p wt-visible@t size-6@t">
+    </div>
+    <div class="wt-grid-item size-12@p size-6@t wt-bg-white">
+        <form class="login" action="/auth/login" method="POST">
+            <div class="wt-grid-container wt-padding">
+                <div class="wt-grid-item size-12@p size-12@t">
+                    <a class="wt-color-primary wt-btn-with-icon" onclick="history.back()"><i
+                            class="material-icons">arrow_back</i>BACK TO WEBSITE</a>
+                </div>
+                <div class="wt-grid-item size-12@p size-12@t">
+                    <h1>Sign In</h1>
+                    <p>Login to your account to access our services</p>
+                </div>
+                <div class="wt-grid-item size-12@p size-12@t">
+                    <label>Email</label>
+                    <input name="username" type="text" />
+                </div>
+                <div class="wt-grid-item size-12@p size-12@t">
+                    <label>Password</label>
+                    <input name="password" type="password" />
+                </div>
+                <div class="wt-grid-item size-12@p">
+                    <div class="wt-text-align-right">
+                        <a class="wt-color-primary" onclick="openModal('forgotModal')">Forgot password?</a>
+                    </div>
+                </div>
+                <div class="wt-grid-item size-12@p">
+                    <button type="submit" class="wt-btn wt-btn-primary wt-btn-large wt-fullwidth">Log In</button>
+                </div>
+                <div class="wt-grid-item size-12@p">
+                    {{#each flash}}
+                    <p class="alert">{{this}}</p>
+                    {{/each}}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="forgotModal" class="wt-modal">
+    <div class="wt-modal-content">
+        <span class="wt-modal-close">&times;</span>
+        <h3>Forgot password</h3>
+        <p>Please contact support jverasoto@student.unimelb.edu.au</p>
+    </div>
+</div>
